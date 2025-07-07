@@ -6,6 +6,8 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 const visitSite = import.meta.env.VITE_SITE;
 const visitLink = visitSite + '/create-checkout-session';
 
+console.log(visitLink);
+
 function App() {
   const handleCheckout = async () => {
     const res = await fetch(visitLink, {
