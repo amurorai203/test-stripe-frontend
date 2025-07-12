@@ -12,7 +12,9 @@ function App() {
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState('gbp');
 
-  const handleCheckout = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
     if (!amount || isNaN(amount) || Number(amount) < 1) {
       alert('Please enter a valid amount');
       return;
