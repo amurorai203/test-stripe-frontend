@@ -10,6 +10,7 @@ console.log(visitLink);
 
 function App() {
   const [amount, setAmount] = useState('');
+  const [currency, setCurrency] = useState('gbp');
 
   const handleCheckout = async () => {
     if (!amount || isNaN(amount) || Number(amount) < 1) {
@@ -22,7 +23,10 @@ function App() {
     const response = await fetch(visitLink, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: Math.round(Number(amount) * 100) }), // convert to cents
+      body: JSON.stringify({
+        amount: Math.round(parseFloat(amount) * 100), // convert to cents
+        currency,
+      }),
     });
 
     const data = await response.json();
@@ -35,19 +39,29 @@ function App() {
   };
 
   return (
-    <div style={{ padding: 40 }}>
-      <h2>Enter Amount to Pay</h2>
-      <input
-        type="number"
-        value={amount}
-        placeholder="e.g. 15.99"
-        onChange={(e) => setAmount(e.target.value)}
-        style={{ padding: 10, marginRight: 10 }}
-      />
-      <button onClick={handleCheckout} style={{ padding: 10 }}>
-        Pay with Stripe
-      </button>
-    </div>
+    <form onSubmit={handleSubmit} style={{ padding: 20 }}>
+      <label>
+        Amount:
+        <input
+          type="number"
+          step="0.01"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          required
+        />
+      </label>
+      <br />
+      <label>
+        Currency:
+        <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+          <option value="usd">USD</option>
+          <option value="gbp">GBP</option>
+          <option value="eur">EUR</option>
+        </select>
+      </label>
+      <br />
+      <button type="submit">Pay with Stripe</button>
+    </form>
   );
 }
 
